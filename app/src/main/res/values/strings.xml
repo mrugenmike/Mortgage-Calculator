@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">mortgage-calculator</string>
+    <string name="hello_world">Home Mortgage Calculator</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="rates_array">
+        <item>Select Rate</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>40</item>
+    </string-array>
+
+</resources>
