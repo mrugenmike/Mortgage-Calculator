@@ -46,9 +46,8 @@ public class MortgageInputFragment extends Fragment implements View.OnClickListe
                     mCallback.onCalculate(mortgageData);
                 } catch (InputValidationException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
+                break;
             case R.id.reset:
                 //do processing
                 homeValueEditable.setText("");
@@ -89,6 +88,7 @@ public class MortgageInputFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
             view = inflater.inflate(R.layout.fragment_main_mortgage, container, false);
             calculate = (Button) view.findViewById(R.id.calculate);
+            calculate.setOnClickListener(this);
             reset = (Button) view.findViewById(R.id.reset);
             reset.setOnClickListener(this);
             homeValueEditable = (EditText) view.findViewById(R.id.homeValue);

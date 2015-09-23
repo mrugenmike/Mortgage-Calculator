@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 
 import mortgage.cmpe277.com.mortgage_calculator.domain.MortgageData;
 
@@ -40,5 +41,21 @@ public class MainMortgageActivity  extends Activity implements MortgageInputFrag
 
     @Override
     public void onCalculate(MortgageData mortgageData) {
+
+        Log.i(TAG, "User provided Mortgage Data "+mortgageData);
+
+        if (mOutputFragment == null)
+            mOutputFragment = new OutputFragment();
+
+        // If in single-pane mode, replace single visible Fragment
+
+        if (!isInTwoPaneMode()) {
+            FragmentTransaction mFragmentTransaction = getFragmentManager().beginTransaction();
+            mFragmentTransaction.replace(R.id.fragment_container, mOutputFragment);
+            mFragmentTransaction.addToBackStack(null);
+            mFragmentTransaction.commit();
+            getFragmentManager().executePendingTransactions();
+        }
+
     }
 }

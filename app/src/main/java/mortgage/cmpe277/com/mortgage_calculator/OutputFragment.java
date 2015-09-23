@@ -6,15 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static mortgage.cmpe277.com.mortgage_calculator.R.layout.fragment_main_mortgage;
+import mortgage.cmpe277.com.mortgage_calculator.domain.MortgageData;
 
 /**
  * Created by mrugen on 9/20/15.
  */
 public class OutputFragment extends Fragment {
 
+    private MortgageData mortgageData;
+
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(fragment_main_mortgage,container,false);
+        return inflater.inflate(R.layout.ouput,container,false);
     }
 }
