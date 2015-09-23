@@ -5,6 +5,15 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+
+import java.util.List;
 
 import mortgage.cmpe277.com.mortgage_calculator.domain.MortgageData;
 
@@ -44,18 +53,24 @@ public class MainMortgageActivity  extends Activity implements MortgageInputFrag
 
         Log.i(TAG, "User provided Mortgage Data "+mortgageData);
 
-        if (mOutputFragment == null)
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data",mortgageData);
+        if (mOutputFragment == null){
             mOutputFragment = new OutputFragment();
-
+        }
+        mOutputFragment.setArguments(bundle);
         // If in single-pane mode, replace single visible Fragment
 
         if (!isInTwoPaneMode()) {
             FragmentTransaction mFragmentTransaction = getFragmentManager().beginTransaction();
             mFragmentTransaction.replace(R.id.fragment_container, mOutputFragment);
+            mOutputFragment.setArguments(bundle);
             mFragmentTransaction.addToBackStack(null);
             mFragmentTransaction.commit();
             getFragmentManager().executePendingTransactions();
         }
 
     }
+
+
 }

@@ -3,7 +3,6 @@
     <string name="hello_world">Home Mortgage Calculator</string>
     <string name="action_settings">Settings</string>
     <string-array name="rates_array">
-        <item>Select Rate</item>
         <item>15</item>
         <item>20</item>
         <item>25</item>

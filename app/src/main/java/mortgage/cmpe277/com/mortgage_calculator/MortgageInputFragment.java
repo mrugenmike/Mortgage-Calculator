@@ -11,6 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Checked;
+import com.mobsandgeeks.saripaar.annotation.DecimalMin;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Select;
+
+import java.util.List;
 
 import mortgage.cmpe277.com.mortgage_calculator.domain.InputValidationException;
 import mortgage.cmpe277.com.mortgage_calculator.domain.MortgageData;
@@ -19,7 +29,7 @@ import mortgage.cmpe277.com.mortgage_calculator.domain.MortgageData;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MortgageInputFragment extends Fragment implements View.OnClickListener {
+public class MortgageInputFragment extends Fragment implements View.OnClickListener,Validator.ValidationListener {
 
     private static String TAG = "Input-Fragment";
 
@@ -27,26 +37,25 @@ public class MortgageInputFragment extends Fragment implements View.OnClickListe
     private View view;
     private Button calculate;
     private Button reset;
+
+    @NotEmpty(message = "Home Value cannot be empty")
     private EditText homeValueEditable;
+    @NotEmpty(message = "Down payment amount cannot be empty")
     private EditText downPaymentEditable;
+    @NotEmpty(message = "Interest Rate must be specified")
     private EditText interestEditText;
     private Spinner rateSpinner;
+    @NotEmpty(message = "Poperty tax rate cannot be empty")
     private EditText propertyTaxRateView;
 
-
+    public Validator validator;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.calculate:
                  // Validate Values
+                validator.validate();
                 // Fetch Values
-
-                try {
-                    MortgageData mortgageData = getMortgageData();
-                    mCallback.onCalculate(mortgageData);
-                } catch (InputValidationException e) {
-                    e.printStackTrace();
-                }
                 break;
             case R.id.reset:
                 //do processing
@@ -74,6 +83,32 @@ public class MortgageInputFragment extends Fragment implements View.OnClickListe
 
     }
 
+    @Override
+    public void onValidationSucceeded() {
+        try {
+            MortgageData mortgageData = getMortgageData();
+            mCallback.onCalculate(mortgageData);
+        } catch (InputValidationException e) {
+            e.printStackTrace();
+        }
+       // Toast.makeText(getActivity(), "Thanks for Input", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getActivity());
+
+            // Display error messages ;)
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     public interface CalculateListener{
         public void onCalculate(MortgageData mortgageData);
     }
@@ -96,6 +131,9 @@ public class MortgageInputFragment extends Fragment implements View.OnClickListe
             interestEditText = (EditText) view.findViewById(R.id.interestEditText);
             rateSpinner = (Spinner) view.findViewById(R.id.rates_spinner);
             propertyTaxRateView = (EditText) view.findViewById(R.id.propertyTaxRateEditView);
+
+            validator = new Validator(this);
+            validator.setValidationListener(this);
             return view;
     }
 
